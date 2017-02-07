@@ -3,6 +3,7 @@ package edu.sql_service_jdbc.server.endpoint;
 
 import edu.sql_service_jdbc.SQLServiceInterface;
 
+import javax.jws.WebMethod;
 import javax.jws.WebService;
 
 /**
@@ -23,13 +24,14 @@ public class SQLService implements SQLServiceInterface {
         return methods.registerDoc(user, "12345");//(new BigInteger(130,new SecureRandom())).toString(5));
     }
 
-
     public boolean registerPatient(String user) {
         return methods.registerPatient(user,"p123");
     }
 
     @Override
-    public boolean addPatient(String doctor, String patient) {
+    public boolean addPatient(String doctor, String docPass, String patient) {
+        if (!methods.checkDocPassword(doctor,docPass))
+            throw new Error();
         methods.registerPatient(patient,"p123");
         return methods.addPatient(doctor,patient);
     }
@@ -45,23 +47,31 @@ public class SQLService implements SQLServiceInterface {
     }
 
     @Override
-    public boolean putRecipe(String doc, String patient, String recipe) {
-        return methods.putRecipe(doc,patient,recipe);
+    public boolean putRecipe(String doctor, String docPass, String patient, String recipe) {
+        if (!methods.checkDocPassword(doctor,docPass))
+            throw new Error();
+        return methods.putRecipe(doctor,patient,recipe);
     }
 
     @Override
-    public String[] getPatients(String doc) {
-        return methods.getPatients(doc).toArray(new String[0]);
+    public String[] getPatients(String doctor, String docPass) {
+        if (!methods.checkDocPassword(doctor,docPass))
+            throw new Error();
+        return methods.getPatients(doctor).toArray(new String[0]);
     }
 
     @Override
-    public String[] getRecipes(String patient) {
+    public String[] getRecipes(String patient, String patientPass) {
+        if (!methods.checkPatientPassword(patient,patientPass))
+            throw new Error();
         return methods.getRecipes(patient).toArray(new String[0]);
     }
 
     @Override
-    public String[] getRecipesDoc(String doc, String patient) {
-        return methods.getRecipesDoc(doc, patient).toArray(new String[0]);
+    public String[] getRecipesDoc(String doctor, String docPass, String patient) {
+        if (!methods.checkDocPassword(doctor,docPass))
+            throw new Error();
+        return methods.getRecipesDoc(doctor, patient).toArray(new String[0]);
     }
 
     @Override
@@ -71,7 +81,7 @@ public class SQLService implements SQLServiceInterface {
 
     public static void main(String[] args) {
         SQLService sqlService = new SQLService();
-        for (String i : sqlService.getPatients("dr1")) {
+        for (String i : sqlService.getPatients("dr1", "12345")) {
             System.out.println(i);
         }
     }

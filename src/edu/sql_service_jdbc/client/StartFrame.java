@@ -1,7 +1,5 @@
 package edu.sql_service_jdbc.client;
 
-import edu.sql_service_jdbc.SQLServiceInterface;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -128,16 +126,18 @@ public class StartFrame extends JFrame{
                         break;
                     case DOC:
                         String docName = userTextField.getText();
-                        if (ServerConnect.getPort().checkDocPassword(docName,passwordTextField.getText())){
-                            new DocFrame(docName);
+                        String docPass = passwordTextField.getText();
+                        if (ServerConnect.getPort().checkDocPassword(docName,docPass)) {
+                            new DocFrame(docName,docPass);
                             PasswordFrame.this.dispose();
                         } else
                             incorrect();
                         break;
                     case PATIENT:
                         String patientName = userTextField.getText();
-                        if (ServerConnect.getPort().checkPatientPassword(patientName,passwordTextField.getText())) {
-                            new PatientFrame(patientName);
+                        String patientPass = passwordTextField.getText();
+                        if (ServerConnect.getPort().checkPatientPassword(patientName,patientPass)) {
+                            new PatientFrame(patientName,patientPass);
                             PasswordFrame.this.dispose();
                         } else incorrect();
                         break;

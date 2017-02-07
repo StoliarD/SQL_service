@@ -9,6 +9,7 @@ import java.awt.event.*;
  */
 public class DocFrame extends AbstractUserFrame{
     String docName;
+    String docPass;
     String patientName;
     JList patientsList;
     DefaultListModel<String> recipesDFM;
@@ -17,9 +18,10 @@ public class DocFrame extends AbstractUserFrame{
     JButton addPatientButton;
     JButton addRecipeButton;
 
-    public DocFrame(String docName) {
+    public DocFrame(String docName, String docPass) {
         servicePort.printHello();
         this.docName = docName;
+        this.docPass = docPass;
         patientName = "";
         setLayout(new BorderLayout());
         setSize(800,800);
@@ -45,7 +47,7 @@ public class DocFrame extends AbstractUserFrame{
     void prepareLists() {
         JPanel panel = new JPanel(new BorderLayout());
         patientsDFM = new DefaultListModel<>();
-        for (String s : servicePort.getPatients(docName)) {
+        for (String s : servicePort.getPatients(docName, docPass)) {
             patientsDFM.addElement(s);
         }
         patientsList = new JList<>(patientsDFM);
@@ -81,10 +83,10 @@ public class DocFrame extends AbstractUserFrame{
                     recipesList.removeAll();
                     String patient = JOptionPane.showInputDialog("input patient name");
                     if (patient!=null && !patient.trim().equals("")) {
-                        if (!servicePort.addPatient(docName,patient))
+                        if (!servicePort.addPatient(docName,docPass,patient))
                             JOptionPane.showMessageDialog(DocFrame.this, "already in your list");
-                        patientsDFM.addElement(patient);
-                        revalidate();
+                        else
+                            patientsDFM.addElement(patient);
                     } else JOptionPane.showMessageDialog(DocFrame.this, "try again with input");
                     revalidate();
                 } else if (source == addRecipeButton){
@@ -92,9 +94,10 @@ public class DocFrame extends AbstractUserFrame{
                         JOptionPane.showMessageDialog(DocFrame.this, "choose patient");
                     } else {
                         String recipe = JOptionPane.showInputDialog("input recipe");
-                        servicePort.putRecipe(docName,patientName,recipe);
-                        recipesDFM.addElement("NOW:   " + recipe);
-                        revalidate();
+                        if (recipe != null) {
+                            servicePort.putRecipe(docName, docPass, patientName, recipe);
+                            recipesDFM.addElement("NOW:   " + recipe);
+                        }
                     }
                 }
             } else if (source instanceof JList) {
@@ -114,7 +117,7 @@ public class DocFrame extends AbstractUserFrame{
                     JOptionPane.showMessageDialog(DocFrame.this, "there may be a phone number");
                 } else {
                     patientName = value;
-                    prepareRecipes(servicePort.getRecipesDoc(docName,patientName));
+                    prepareRecipes(servicePort.getRecipesDoc(docName,docPass,patientName));
                 }
             } else if (source == recipesList) {
                 JOptionPane.showMessageDialog(DocFrame.this, recipesList.getSelectedValue());

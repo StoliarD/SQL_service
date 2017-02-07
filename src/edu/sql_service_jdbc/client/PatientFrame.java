@@ -13,12 +13,14 @@ import java.util.Vector;
  */
 public class PatientFrame extends AbstractUserFrame {
     String patientName;
+    String patientPass;
     JList<String> recipesList;
-    public PatientFrame(String patientName) {
+    public PatientFrame(String patientName, String patientPass) {
         setSize(600,400);
         this.patientName = patientName;
+        this.patientPass = patientPass;
         setTitle("docs patients drugs: patient " + patientName);
-        recipesList = new JList<>(new Vector<>(Arrays.asList(servicePort.getRecipes(patientName))));
+        recipesList = new JList<>(new Vector<>(Arrays.asList(servicePort.getRecipes(patientName,patientPass))));
         recipesList.addMouseListener(listListener);
         JScrollPane scrollPane = new JScrollPane(recipesList,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
