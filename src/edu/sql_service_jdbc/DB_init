@@ -31,21 +31,3 @@ CREATE TABLE recipes (
 	CONSTRAINT recipes_ptnt FOREIGN KEY  (ptnt) REFERENCES patients (ptnt_name),
 	PRIMARY KEY(dctr, ptnt, date)
 );
-
-# ALTER TABLE recipes ADD FOREIGN KEY (dctr) REFERENCES doctors(dctr_name);
-
-SELECT EXISTS(SELECT dctr_name FROM doctors WHERE dctr_name = "dr1");
-
-SELECT dctr_pass FROM doctors WHERE dctr_name = "dr1";
-
-INSERT INTO doctors (dctr_name, dctr_pass) VALUES ("dr1","111");
-
-DELETE FROM doctors WHERE TRUE ;
-
-SELECT EXISTS(SELECT ptnt_name FROM patients WHERE ptnt_name = "pt1");
-
-INSERT INTO recipes (dctr, ptnt, date, recipe) VALUES ("doc", "patient", "date", "recipe");
-
-SELECT date, recipe FROM recipes WHERE (dctr,ptnt) = ("d1", "pt1");
-
-SELECT dctr, date, recipe FROM recipes WHERE ptnt = "patient";
