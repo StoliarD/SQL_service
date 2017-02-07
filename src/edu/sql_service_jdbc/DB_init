@@ -1,0 +1,51 @@
+
+
+CREATE DATABASE hospital;
+USE hospital;
+
+CREATE TABLE doctors (
+	dctr_id INT AUTO_INCREMENT PRIMARY KEY,
+	dctr_name VARCHAR(15) NOT NULL UNIQUE KEY,
+	dctr_pass VARCHAR(15)
+);
+
+CREATE TABLE patients (
+	ptnt_id INT AUTO_INCREMENT PRIMARY KEY,
+	ptnt_name VARCHAR(15) NOT NULL UNIQUE KEY,
+	ptnt_pass VARCHAR(15) NOT NULL
+);
+
+CREATE TABLE doc_to_ptnt (
+	dctr_name VARCHAR(15) NOT NULL,
+	ptnt_name VARCHAR(15) NOT NULL,
+	CONSTRAINT dctr_c FOREIGN KEY (dctr_name) REFERENCES doctors (dctr_name),
+	CONSTRAINT ptnt_c FOREIGN KEY (ptnt_name) REFERENCES patients (ptnt_name)
+);
+
+CREATE TABLE recipes (
+	dctr VARCHAR(15) NOT NULL,
+	ptnt VARCHAR(15) NOT NULL,
+	date DATETIME,
+	recipe VARCHAR(50),
+	CONSTRAINT recipes_dctr	FOREIGN KEY (dctr) REFERENCES doctors (dctr_name),
+	CONSTRAINT recipes_ptnt FOREIGN KEY  (ptnt) REFERENCES patients (ptnt_name),
+	PRIMARY KEY(dctr, ptnt, date)
+);
+
+# ALTER TABLE recipes ADD FOREIGN KEY (dctr) REFERENCES doctors(dctr_name);
+
+SELECT EXISTS(SELECT dctr_name FROM doctors WHERE dctr_name = "dr1");
+
+SELECT dctr_pass FROM doctors WHERE dctr_name = "dr1";
+
+INSERT INTO doctors (dctr_name, dctr_pass) VALUES ("dr1","111");
+
+DELETE FROM doctors WHERE TRUE ;
+
+SELECT EXISTS(SELECT ptnt_name FROM patients WHERE ptnt_name = "pt1");
+
+INSERT INTO recipes (dctr, ptnt, date, recipe) VALUES ("doc", "patient", "date", "recipe");
+
+SELECT date, recipe FROM recipes WHERE (dctr,ptnt) = ("d1", "pt1");
+
+SELECT dctr, date, recipe FROM recipes WHERE ptnt = "patient";
