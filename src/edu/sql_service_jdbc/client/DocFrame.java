@@ -90,7 +90,7 @@ public class DocFrame extends AbstractUserFrame{
                     } else JOptionPane.showMessageDialog(DocFrame.this, "try again with input");
                     revalidate();
                 } else if (source == addRecipeButton){
-                    if (patientName == null) {
+                    if (patientName == null || patientName.equals("")) {
                         JOptionPane.showMessageDialog(DocFrame.this, "choose patient");
                     } else {
                         String recipe = JOptionPane.showInputDialog("input recipe");
