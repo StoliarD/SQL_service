@@ -112,13 +112,12 @@ public class DocFrame extends AbstractUserFrame{
             Object source = e.getSource();
             if (source == patientsList) {
                 String value = (String) patientsList.getSelectedValue();
-                System.out.println(value);
-                if (patientName.equals(value)) {
-                    JOptionPane.showMessageDialog(DocFrame.this, "there may be a phone number");
-                } else {
-                    patientName = value;
-                    prepareRecipes(servicePort.getRecipesDoc(docName,docPass,patientName));
-                }
+                    if (patientName!=null && !patientName.equals("") && patientName.equals(value)) {
+                        JOptionPane.showMessageDialog(DocFrame.this, "there may be a phone number");
+                    } else {
+                        patientName = value;
+                        prepareRecipes(servicePort.getRecipesDoc(docName, docPass, patientName));
+                    }
             } else if (source == recipesList) {
                 JOptionPane.showMessageDialog(DocFrame.this, recipesList.getSelectedValue());
             }
